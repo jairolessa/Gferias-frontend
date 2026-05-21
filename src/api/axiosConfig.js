@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-const usersBaseURL = import.meta.env.VITE_API_USERS_URL || 'http://localhost:8080';
-const vacationBaseURL = import.meta.env.VITE_API_VACATION_URL || 'http://localhost:8081';
+const usersBaseURL = import.meta.env.VITE_API_USERS_URL || 'https://api-rest-users-gferias.onrender.com';
+const vacationBaseURL = import.meta.env.VITE_API_VACATION_URL || 'https://gferias.onrender.com';
 
 export const usersApi = axios.create({
   baseURL: usersBaseURL,
