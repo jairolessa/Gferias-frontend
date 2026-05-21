@@ -1,5 +1,4 @@
 import { usersApi } from './axiosConfig';
-import { register } from './authApi';
 
 export const getUsers = async () => {
   const response = await usersApi.get('/users');
@@ -11,7 +10,10 @@ export const getUser = async (id) => {
   return response.data;
 };
 
-export const createUser = register;
+export const createUser = async (data) => {
+  const response = await usersApi.post('/users', data);
+  return response.data;
+};
 
 export const updateUser = async (id, data) => {
   const response = await usersApi.put(`/users/${id}`, data);

@@ -19,25 +19,33 @@ const PrivateLayout = () => (
   </>
 );
 
+const HomeRedirect = () => {
+  const { isAdmin } = useAuth();
+  return <Navigate to={isAdmin ? '/users' : '/vacation-balance'} replace />;
+};
+
 const App = () => {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, isAdmin } = useAuth();
+  const defaultPath = isAdmin ? '/users' : '/vacation-balance';
 
   return (
     <Routes>
-      <Route path="/login" element={isAuthenticated ? <Navigate to="/users" replace /> : <LoginPage />} />
+      <Route path="/login" element={isAuthenticated ? <Navigate to={defaultPath} replace /> : <LoginPage />} />
       <Route element={<PrivateRoute />}>
         <Route element={<PrivateLayout />}>
-          <Route path="/" element={<Navigate to="/users" replace />} />
-          <Route path="/users" element={<UsersPage />} />
-          <Route path="/users/new" element={<UserFormPage />} />
-          <Route path="/users/:id/edit" element={<UserFormPage />} />
-          <Route path="/departments" element={<DepartmentsPage />} />
-          <Route path="/departments/new" element={<DepartmentFormPage />} />
+          <Route path="/" element={<HomeRedirect />} />
           <Route path="/vacation-balance" element={<VacationBalancePage />} />
           <Route path="/vacation" element={<VacationPage />} />
+          <Route element={<PrivateRoute adminOnly />}>
+            <Route path="/users" element={<UsersPage />} />
+            <Route path="/users/new" element={<UserFormPage />} />
+            <Route path="/users/:id/edit" element={<UserFormPage />} />
+            <Route path="/departments" element={<DepartmentsPage />} />
+            <Route path="/departments/new" element={<DepartmentFormPage />} />
+          </Route>
         </Route>
       </Route>
-      <Route path="*" element={<Navigate to={isAuthenticated ? '/users' : '/login'} replace />} />
+      <Route path="*" element={<Navigate to={isAuthenticated ? defaultPath : '/login'} replace />} />
     </Routes>
   );
 };

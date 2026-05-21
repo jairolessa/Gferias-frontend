@@ -19,8 +19,13 @@ const LoginPage = () => {
     setApiError('');
 
     try {
-      await login(data.cpf, data.password);
-      navigate(location.state?.from?.pathname || '/users', { replace: true });
+      const authData = await login(data.cpf, data.password);
+      const fromPath = location.state?.from?.pathname;
+      const defaultPath = authData.isAdmin ? '/users' : '/vacation-balance';
+      const adminPaths = ['/users', '/departments'];
+      const isAdminPath = fromPath && adminPaths.some((path) => fromPath.startsWith(path));
+      const destination = fromPath && (!isAdminPath || authData.isAdmin) ? fromPath : defaultPath;
+      navigate(destination, { replace: true });
     } catch (error) {
       setApiError(getApiErrorMessage(error));
     }
